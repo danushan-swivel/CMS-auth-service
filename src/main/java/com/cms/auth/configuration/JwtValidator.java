@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JwtValidator extends OncePerRequestFilter {
-    @Value("${jwt.secretKey.name}")
-    private String secretKey;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
@@ -45,6 +43,7 @@ public class JwtValidator extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return request.getServletPath().equals("/api/v1/sign-up") || request.getServletPath().equals("/api/v1/login");
+        return request.getServletPath().equals("/api/v1/user/sign-up") || request.getServletPath().equals("/api/v1/user/login")
+                || request.getServletPath().equals("/api/v1/user/error");
     }
 }

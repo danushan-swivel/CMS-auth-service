@@ -6,9 +6,9 @@ spring:
     name: CMS-Auth-Service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/cms_auth
-    username: root
-    password: Dev@#$123
+    url: jdbc:mysql://b6060dfffd3b4a:4deab34a@us-cdbr-east-06.cleardb.net/heroku_58fbec60b723d43?reconnect=true
+#    username: root
+#    password: Dev@#$123
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:

@@ -28,8 +28,8 @@ public class JwtGenerator extends OncePerRequestFilter {
                     .withSubject("JWT TOKEN")
                     .withClaim("username", authentication.getName())
                     .withClaim("authorities", authoritiesList(authentication.getAuthorities()))
-                    .withIssuedAt(new Date())
-                    .withExpiresAt(new Date(new Date().getTime() + 10 * 60 * 1000))
+                    .withIssuedAt(new Date(System.currentTimeMillis()))
+                    .withExpiresAt(new Date(new Date(System.currentTimeMillis()).getTime() + 2000 * 60  * 1000))
                     .sign(Algorithm.HMAC256(Constants.SECURITY_KEY.getBytes()));
             httpServletResponse.setHeader(Constants.TOKEN_HEADER, jwtToken);
         }

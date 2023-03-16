@@ -36,10 +36,13 @@ public class UserAuthentication implements AuthenticationProvider {
                 authorities.add(authority);
                 return new UsernamePasswordAuthenticationToken(userName, password, authorities);
             } else {
-                throw new BadCredentialsException("The user name and password doesn't match");
+                throw new AuthenticationException("The user name and password doesn't match") {
+                };
             }
-        } else {
-            throw new BadCredentialsException("The user is invalid");
+        }else {
+//            errorResponseGenerator.sendErrorResponse();
+            throw new AuthenticationException("The user is invalid") {
+            };
         }
     }
 
