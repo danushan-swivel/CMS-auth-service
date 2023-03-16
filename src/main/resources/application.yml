@@ -2,6 +2,8 @@ server:
   port: 8111
 
 spring:
+  main:
+    allow-circular-references: true
   application:
     name: CMS-Auth-Service
 
@@ -16,12 +18,15 @@ spring:
     hibernate:
       ddl-auto: update
 
+
+
 eureka:
   client:
     serviceUrl:
       defaultZone: https://cms-discovery.herokuapp.com/eureka
   instance:
     preferIpAddress: true
+
 
 
   main:
