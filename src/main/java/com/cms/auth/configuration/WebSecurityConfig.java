@@ -36,18 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterAfter(new JwtGenerator(), BasicAuthenticationFilter.class)
-//                .addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class)
-                .cors().configurationSource(request -> {
-                    CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowCredentials(true);
-                    configuration.setAllowedHeaders(Collections.singletonList("*"));
-                    configuration.setAllowedMethods(Collections.singletonList("*"));
-                    configuration.setExposedHeaders(Collections.singletonList("access_token"));
-                    configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000/"));
-                    configuration.setMaxAge(3600L);
-                    return configuration;
-                }).and()
-
+                .addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class)
                 .csrf().disable()
                 .authorizeRequests().antMatchers("/api/v1/user/sign-up", "/api/v1/user/login", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
