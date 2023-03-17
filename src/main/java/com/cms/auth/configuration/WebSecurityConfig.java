@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterAfter(new JwtGenerator(), BasicAuthenticationFilter.class)
-                .addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class)
+//                .addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class)
                 .cors().configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
                     configuration.setAllowCredentials(true);
@@ -49,8 +49,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 }).and()
 
                 .csrf().disable()
-                .authorizeRequests().antMatchers("/api/v1/user/sign-up", "/api/v1/user/login").permitAll()
+                .authorizeRequests().antMatchers("/api/v1/user/sign-up", "/api/v1/user/login", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
+
                 .and().formLogin().and().httpBasic();
     }
 

@@ -44,6 +44,6 @@ public class JwtValidator extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         return request.getServletPath().equals("/api/v1/user/sign-up") || request.getServletPath().equals("/api/v1/user/login")
-                || request.getServletPath().equals("/api/v1/user/error");
+                || request.getServletPath().equals("/api/v1/user/error") || request.getServletPath().equals("/swagger-ui/**");
     }
 }

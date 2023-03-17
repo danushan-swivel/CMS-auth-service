@@ -46,6 +46,7 @@ public class JwtGenerator extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return request.getServletPath().equals("/api/v1/user/users");
+        return request.getServletPath().equals("/api/v1/user/users") || request.getServletPath().equals("/v3/api-docs/**")
+                || request.getServletPath().equals("/swagger-ui.html") || request.getServletPath().equals("/swagger-ui/**");
     }
 }
