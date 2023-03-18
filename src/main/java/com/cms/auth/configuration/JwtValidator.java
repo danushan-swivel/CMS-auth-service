@@ -21,13 +21,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JwtValidator extends OncePerRequestFilter {
+    private final String key;
+
+    public JwtValidator(@Value("${security.key}") String key) {
+        this.key = key;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                     FilterChain filterChain) throws ServletException, IOException {
         String jwtToken = httpServletRequest.getHeader(Constants.TOKEN_HEADER);
         if (jwtToken != null) {
-            JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(Constants.SECURITY_KEY.getBytes())).build();
+            JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(key)).build();
             DecodedJWT decodedJWT = jwtVerifier.verify(jwtToken);
             String userName = decodedJWT.getClaim("username").toString();
             var roles = decodedJWT.getClaim("authorities").asList(String.class);
@@ -44,6 +49,7 @@ public class JwtValidator extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         return request.getServletPath().equals("/api/v1/user/sign-up") || request.getServletPath().equals("/api/v1/user/login")
-                || request.getServletPath().equals("/api/v1/user/error") || request.getServletPath().equals("/swagger-ui/**");
+                || request.getServletPath().equals("/api/v1/user/error") || request.getServletPath().equals("/swagger-ui/**")
+                || request.getServletPath().equals("/v2/api-docs/**");
     }
 }

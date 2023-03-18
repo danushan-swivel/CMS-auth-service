@@ -15,9 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class JwtGenerator extends OncePerRequestFilter {
+
+    private final String key;
+
+    public JwtGenerator(@Value("${security.key}") String key) {
+        this.key = key;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
@@ -30,7 +35,7 @@ public class JwtGenerator extends OncePerRequestFilter {
                     .withClaim("authorities", authoritiesList(authentication.getAuthorities()))
                     .withIssuedAt(new Date(System.currentTimeMillis()))
                     .withExpiresAt(new Date(new Date(System.currentTimeMillis()).getTime() + 2000 * 60  * 1000))
-                    .sign(Algorithm.HMAC256(Constants.SECURITY_KEY.getBytes()));
+                    .sign(Algorithm.HMAC256(key));
             httpServletResponse.setHeader(Constants.TOKEN_HEADER, jwtToken);
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);

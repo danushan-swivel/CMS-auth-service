@@ -38,8 +38,8 @@ eureka:
   main:
     allow-circular-references: true
 
-jwt:
-  secretKey:
-    name: ${SECRET_KEY:secretKey}
+
+security:
+  key: accessKey
 
 
