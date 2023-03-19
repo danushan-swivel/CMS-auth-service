@@ -41,6 +41,7 @@ public class JwtValidator extends OncePerRequestFilter {
             SecurityContextHolder.getContext()
                     .setAuthentication(new UsernamePasswordAuthenticationToken(userName, null, authorityList));
         } else {
+            httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token not available");
             throw new BadCredentialsException("Invalid JWT token");
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
@@ -49,7 +50,7 @@ public class JwtValidator extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         return request.getServletPath().equals("/api/v1/user/sign-up") || request.getServletPath().equals("/api/v1/user/login")
-                || request.getServletPath().equals("/api/v1/user/error") || request.getServletPath().equals("/swagger-ui/**")
+                || request.getServletPath().equals("/swagger-ui/**")
                 || request.getServletPath().equals("/v2/api-docs/**");
     }
 }

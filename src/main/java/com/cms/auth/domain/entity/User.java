@@ -38,8 +38,4 @@ public class User {
         this.roleType = RoleType.valueOf(userRequestDto.getRoleType().toUpperCase());
         this.isDeleted = false;
     }
-
-    public void update() {
-
-    }
 }

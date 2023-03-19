@@ -4,7 +4,6 @@ import com.cms.auth.domain.entity.User;
 import com.cms.auth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -39,8 +38,7 @@ public class UserAuthentication implements AuthenticationProvider {
                 throw new AuthenticationException("The user name and password doesn't match") {
                 };
             }
-        }else {
-//            errorResponseGenerator.sendErrorResponse();
+        } else {
             throw new AuthenticationException("The user is invalid") {
             };
         }

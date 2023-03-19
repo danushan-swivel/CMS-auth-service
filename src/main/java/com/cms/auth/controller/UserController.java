@@ -77,11 +77,4 @@ public class UserController {
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @GetMapping("/error")
-    public ResponseEntity<ResponseWrapper> errorResponse() {
-        var wrapper = new ErrorResponseWrapper(ErrorResponseStatus.INVALID_USER, null);
-        return new ResponseEntity<>(wrapper, HttpStatus.OK);
-    }
-
 }

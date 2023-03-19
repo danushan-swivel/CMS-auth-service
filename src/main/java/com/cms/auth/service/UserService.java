@@ -23,6 +23,12 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * This method create user
+     *
+     * @param userRequestDto user request dto
+     * @return User
+     */
     public User createUser(UserRequestDto userRequestDto) {
         try {
             if (isUserExists(userRequestDto.getUserName())) {
@@ -36,6 +42,12 @@ public class UserService {
         }
     }
 
+    /**
+     * This method check user existence
+     *
+     * @param userName user name
+     * @return true/ false
+     */
     public boolean isUserExists(String userName) {
         try {
             return userRepository.existsByUserNameAndIsDeletedFalse(userName);
@@ -44,6 +56,12 @@ public class UserService {
         }
     }
 
+    /**
+     * This method login the user
+     *
+     * @param userName user name
+     * @return User
+     */
     public User login(String userName) {
         try {
             return userRepository.findByUserName(userName);
@@ -52,6 +70,11 @@ public class UserService {
         }
     }
 
+    /**
+     * This method get all use details
+     *
+     * @return UserPage
+     */
     public Page<User> getAllUser() {
         try {
             Pageable pageable = PageRequest.of(0, 10, Sort.by("updated_at").descending());

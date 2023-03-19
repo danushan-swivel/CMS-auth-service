@@ -34,9 +34,11 @@ public class JwtGenerator extends OncePerRequestFilter {
                     .withClaim("username", authentication.getName())
                     .withClaim("authorities", authoritiesList(authentication.getAuthorities()))
                     .withIssuedAt(new Date(System.currentTimeMillis()))
-                    .withExpiresAt(new Date(new Date(System.currentTimeMillis()).getTime() + 2000 * 60  * 1000))
+                    .withExpiresAt(new Date(new Date(System.currentTimeMillis()).getTime() + 2000 * 60 * 1000))
                     .sign(Algorithm.HMAC256(key));
             httpServletResponse.setHeader(Constants.TOKEN_HEADER, jwtToken);
+        } else {
+            httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication is failed");
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
