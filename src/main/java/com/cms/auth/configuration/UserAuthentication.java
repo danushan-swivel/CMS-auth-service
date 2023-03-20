@@ -27,8 +27,9 @@ public class UserAuthentication implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String userName = authentication.getName();
         String password = authentication.getCredentials().toString();
-        User user = userRepository.findByUserName(userName);
-        if (user != null) {
+        var optionalUser = userRepository.findByUserName(userName);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
             if (passwordEncoder.matches(password, user.getPassword())) {
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRoleType().toString());

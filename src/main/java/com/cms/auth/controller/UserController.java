@@ -57,7 +57,7 @@ public class UserController {
             String token = response.getHeader(Constants.TOKEN_HEADER);
             User user = userService.login(authentication.getName());
             var responseDto = new LoginResponseDto(user, token);
-            var wrapper = new SuccessResponseWrapper(SuccessResponseStatus.USER_CREATES, responseDto);
+            var wrapper = new SuccessResponseWrapper(SuccessResponseStatus.USER_LOGGING_IN, responseDto);
             return new ResponseEntity<>(wrapper, HttpStatus.OK);
         } catch (AuthException e) {
             var errorResponse = new ErrorResponseWrapper(ErrorResponseStatus.INTERNAL_SERVER_ERROR, null);

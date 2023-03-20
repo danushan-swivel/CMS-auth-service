@@ -4,6 +4,7 @@ import com.cms.auth.domain.entity.User;
 import com.cms.auth.domain.request.UserRequestDto;
 import com.cms.auth.exception.AlreadyExistException;
 import com.cms.auth.exception.AuthException;
+import com.cms.auth.exception.InvalidUserException;
 import com.cms.auth.repository.UserRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
+    private static final int PAGE = 0;
+    private static final int SIZE = 100;
+    private static final String DEFAULT_SORT = "updated_at";
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -64,7 +69,11 @@ public class UserService {
      */
     public User login(String userName) {
         try {
-            return userRepository.findByUserName(userName);
+            var optionalUser = userRepository.findByUserName(userName);
+            if (optionalUser.isEmpty()) {
+                throw new InvalidUserException("The user name not exists");
+            }
+            return optionalUser.get();
         } catch (DataAccessException e) {
             throw new AuthException("Getting user from database is failed", e);
         }
@@ -77,7 +86,7 @@ public class UserService {
      */
     public Page<User> getAllUser() {
         try {
-            Pageable pageable = PageRequest.of(0, 10, Sort.by("updated_at").descending());
+            Pageable pageable = PageRequest.of(PAGE, SIZE, Sort.by(DEFAULT_SORT).descending());
             return userRepository.findAll(pageable);
         } catch (DataAccessException e) {
             throw new AuthException("Getting all user from database is failed", e);
