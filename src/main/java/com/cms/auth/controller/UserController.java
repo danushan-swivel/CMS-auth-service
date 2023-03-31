@@ -17,7 +17,6 @@ import com.cms.auth.wrapper.SuccessResponseWrapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -52,10 +51,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseWrapper> login(Authentication authentication, HttpServletResponse response) {
+    public ResponseEntity<ResponseWrapper> login(@RequestParam String username, @RequestParam String password,
+                                                 HttpServletResponse response) {
         try {
             String token = response.getHeader(Constants.TOKEN_HEADER);
-            User user = userService.login(authentication.getName());
+            User user = userService.login(username);
             var responseDto = new LoginResponseDto(user, token);
             var wrapper = new SuccessResponseWrapper(SuccessResponseStatus.USER_LOGGING_IN, responseDto);
             return new ResponseEntity<>(wrapper, HttpStatus.OK);
