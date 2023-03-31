@@ -48,17 +48,13 @@ public class JwtValidator extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         String[] requests = {"/api/v1/user/login", "/api/v1/user/sign-up", "/v2/api-docs",
                 "/swagger-resources", "/swagger-ui/", "/swagger-ui/springfox.css", "/swagger-ui/swagger-ui-bundle.js", "/swagger-ui/swagger-ui.css",
                 "/swagger-resources/configuration/security", "/swagger-resources/configuration/ui", "/swagger-ui/springfox.js", "/swagger-ui/swagger-ui-standalone-preset.js",
                 "/swagger-ui/favicon-32x32.png"
         };
         List<String> requestList = Arrays.asList(requests);
-        var re = request.getServletPath();
-        if (requestList.contains(request.getServletPath())) {
-            return true;
-        }
-        return false;
+        return requestList.contains(request.getServletPath());
     }
 }
