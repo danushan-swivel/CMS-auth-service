@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum SuccessResponseStatus {
     USER_CREATES(3000, "User created successfully"),
-    USER_LOGGING_IN(3005, "User logging in successfully"),
+    USER_LOGGED_IN(3005, "User logging in successfully"),
     USER_UPDATED(3001, "User updated successfully"),
     USER_DELETED(3002, "User deleted successfully"),
     READ_USER(3003, "Read user successfully"),

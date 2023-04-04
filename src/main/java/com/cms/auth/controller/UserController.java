@@ -37,6 +37,7 @@ public class UserController {
         try {
             if (!userRequestDto.isRequiredAvailable()) {
                 var response = new ErrorResponseWrapper(ErrorResponseStatus.MISSING_REQUIRED_FIELDS, null);
+                log.error("The required field values {} are missing for create new user", userRequestDto.toJson());
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
             var user = userService.createUser(userRequestDto);
@@ -62,7 +63,7 @@ public class UserController {
             String token = response.getHeader(Constants.TOKEN_HEADER);
             User user = userService.login(username);
             var responseDto = new LoginResponseDto(user, token);
-            var wrapper = new SuccessResponseWrapper(SuccessResponseStatus.USER_LOGGING_IN, responseDto);
+            var wrapper = new SuccessResponseWrapper(SuccessResponseStatus.USER_LOGGED_IN, responseDto);
             log.debug("The user logged in successfully");
             return new ResponseEntity<>(wrapper, HttpStatus.OK);
         } catch (AuthException e) {
@@ -78,9 +79,11 @@ public class UserController {
             Page<User> userPage = userService.getAllUser();
             var response = new AllUserResponseDto(userPage);
             var wrapper = new SuccessResponseWrapper(SuccessResponseStatus.READ_LIST_USER, response);
+            log.debug("Successfully returned the all registered users");
             return new ResponseEntity<>(wrapper, HttpStatus.OK);
         } catch (AuthException e) {
             var errorResponse = new ErrorResponseWrapper(ErrorResponseStatus.INTERNAL_SERVER_ERROR, null);
+            log.error("The get the all user details is failed");
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

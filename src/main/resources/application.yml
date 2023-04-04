@@ -43,7 +43,6 @@ logging:
   level:
     com.cms.auth: ${LOG_LEVEL:DEBUG}
   file:
-#    path: ${LOGPATH:D:/Swivel Mini Projects/Mini project 01/logs}
-    path: ${LOGPATH:./}
+    path: ${LOGPATH:./log}
 
 

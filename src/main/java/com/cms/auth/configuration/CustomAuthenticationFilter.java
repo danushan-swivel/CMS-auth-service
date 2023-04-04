@@ -2,8 +2,12 @@ package com.cms.auth.configuration;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.cms.auth.enums.ErrorResponseStatus;
 import com.cms.auth.utills.Constants;
+import com.cms.auth.utills.FilterErrorResponseGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,9 +27,14 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     private final String key;
     private final AuthenticationManager authenticationManager;
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, @Value("${security.key}") String key) {
+    private final FilterErrorResponseGenerator errorResponseGenerator;
+
+    @Autowired
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, @Value("${security.key}") String key,
+                                      FilterErrorResponseGenerator errorResponseGenerator) {
         this.authenticationManager = authenticationManager;
         this.key = key;
+        this.errorResponseGenerator = errorResponseGenerator;
     }
 
     @Override
@@ -57,5 +66,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             authoritySet.add(authority.getAuthority());
         }
         return new ArrayList<>(authoritySet);
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                              AuthenticationException failed) throws IOException {
+        errorResponseGenerator.sendErrorResponse(response, ErrorResponseStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
     }
 }

@@ -1,5 +1,6 @@
 package com.cms.auth.configuration;
 
+import com.cms.auth.utills.FilterErrorResponseGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,8 +38,9 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager, key);
+    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager,
+                                           FilterErrorResponseGenerator errorResponseGenerator) throws Exception {
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager, key, errorResponseGenerator);
         customAuthenticationFilter.setFilterProcessesUrl("/api/v1/user/login");
         http.addFilter(customAuthenticationFilter)
                 .addFilterBefore(new JwtValidator(key), UsernamePasswordAuthenticationFilter.class)
