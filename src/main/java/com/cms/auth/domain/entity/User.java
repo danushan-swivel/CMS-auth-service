@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.UUID;
 
 @Getter
@@ -18,15 +19,21 @@ import java.util.UUID;
 @Entity
 public class User {
     private static final String PRE_FIX = "uid-";
+
     @Id
+    @Column(length = 50)
     private String userId;
+    @Column(length = 40)
     private String emailAddress;
+    @Column(length = 50)
     private String userName;
+    @Column(length = 70)
     private String password;
+    @Column(length = 10)
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
-    private long createdAt;
-    private long updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
     private boolean isDeleted;
 
     public User(UserRequestDto userRequestDto) {
@@ -34,7 +41,7 @@ public class User {
         this.userName = userRequestDto.getUserName();
         this.emailAddress = userRequestDto.getEmailAddress();
         this.password = null;
-        this.createdAt = this.updatedAt = System.currentTimeMillis();
+        this.createdAt = this.updatedAt = new Date(System.currentTimeMillis());
         this.roleType = RoleType.valueOf(userRequestDto.getRoleType().toUpperCase());
         this.isDeleted = false;
     }

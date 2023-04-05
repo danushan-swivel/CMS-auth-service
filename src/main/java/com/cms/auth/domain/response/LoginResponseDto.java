@@ -4,6 +4,8 @@ import com.cms.auth.domain.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Date;
+
 @Getter
 @Setter
 public class LoginResponseDto extends ResponseDto{
@@ -11,8 +13,8 @@ public class LoginResponseDto extends ResponseDto{
     private String token;
     private String userName;
     private String roleType;
-    private long createdAt;
-    private long updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
     private boolean isDeleted;
 
     public LoginResponseDto(User user, String token) {
