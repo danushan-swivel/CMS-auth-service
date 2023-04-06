@@ -4,14 +4,16 @@ import com.cms.auth.domain.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Date;
+
 @Getter
 @Setter
 public class UserResponseDto extends ResponseDto {
     private String userId;
     private String userName;
     private String roleType;
-    private long createdAt;
-    private long updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
     private boolean isDeleted;
 
     public UserResponseDto(User user) {

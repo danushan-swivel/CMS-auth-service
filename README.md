@@ -1,5 +1,38 @@
-# CMS-auth-service
-The auth servicen for the Class Management System
+## CMS Auth Service
+This is auth microservice of the Class Management System
 
-# Sonar Report
-![auth-sonar](https://user-images.githubusercontent.com/101617280/226342549-e5d5996c-45e8-4239-a170-29750814c3e7.png)
+## Requirements
+* Open JDK 11
+* Spring boot 2.7.9
+* MySQL 8.0
+* Maven 3.6
+
+
+
+## Build
+
+```
+mvn clean compile package
+```
+
+## Run
+
+```
+mvn spring-boot:run
+```
+
+or
+
+```
+java -jar target/auth-0.0.1-SNAPSHOT.jar
+```
+
+## Test
+
+```
+mvn test
+```
+
+## Sonar Dashboard
+```
+https://sonarcloud.io/project/overview?id=danushan-swivel_CMS-auth-service```

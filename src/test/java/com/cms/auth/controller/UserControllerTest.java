@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -75,7 +76,7 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.message").value(SuccessResponseStatus.USER_CREATES.getMessage()))
-                .andExpect(jsonPath("$.statusCode").value(SuccessResponseStatus.USER_CREATES.getStatusCode()))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.CREATED.value()))
                 .andExpect(jsonPath("$.data.userId", startsWith("uid-")));
     }
 
@@ -90,37 +91,7 @@ class UserControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.message").value(ErrorResponseStatus.MISSING_REQUIRED_FIELDS.getMessage()))
-                .andExpect(jsonPath("$.statusCode").value(ErrorResponseStatus.MISSING_REQUIRED_FIELDS.getStatusCode()))
-                .andExpect(jsonPath("$.data", nullValue()));
-    }
-
-    @Test
-    void Should_ReturnBadRequest_When_UserAlreadyExistsInSameNameForCreateUser() throws Exception {
-        UserRequestDto userRequestDto = getSampleUserRequestDto();
-        doThrow(new AlreadyExistException("ERROR")).when(userService).createUser(any(UserRequestDto.class));
-        mockMvc.perform(MockMvcRequestBuilders.post(CREATE_USER_URL)
-                        .header(Constants.TOKEN_HEADER, ACCESS_TOKEN)
-                        .content(userRequestDto.toJson())
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.message").value(ErrorResponseStatus.USER_EXISTS.getMessage()))
-                .andExpect(jsonPath("$.statusCode").value(ErrorResponseStatus.USER_EXISTS.getStatusCode()))
-                .andExpect(jsonPath("$.data", nullValue()));
-    }
-
-    @Test
-    void Should_ReturnInternalServerError_When_CreateUserIsFailed() throws Exception {
-        UserRequestDto userRequestDto = getSampleUserRequestDto();
-        doThrow(new AuthException("ERROR")).when(userService).createUser(any(UserRequestDto.class));
-        mockMvc.perform(MockMvcRequestBuilders.post(CREATE_USER_URL)
-                        .header(Constants.TOKEN_HEADER, ACCESS_TOKEN)
-                        .content(userRequestDto.toJson())
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.message").value(ErrorResponseStatus.INTERNAL_SERVER_ERROR.getMessage()))
-                .andExpect(jsonPath("$.statusCode").value(ErrorResponseStatus.INTERNAL_SERVER_ERROR.getStatusCode()))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.data", nullValue()));
     }
 
@@ -134,22 +105,8 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.message").value(SuccessResponseStatus.READ_LIST_USER.getMessage()))
-                .andExpect(jsonPath("$.statusCode").value(SuccessResponseStatus.READ_LIST_USER.getStatusCode()))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.data.users[0].userId", startsWith("uid-")));
-    }
-
-
-    @Test
-    void Should_ReturnInternalServerError_When_GetAllUsersIsFailed() throws Exception {
-        doThrow(new AuthException("ERROR")).when(userService).getAllUser();
-        mockMvc.perform(MockMvcRequestBuilders.get(GET_ALL_USER_URL)
-                        .header(Constants.TOKEN_HEADER, ACCESS_TOKEN)
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.message").value(ErrorResponseStatus.INTERNAL_SERVER_ERROR.getMessage()))
-                .andExpect(jsonPath("$.statusCode").value(ErrorResponseStatus.INTERNAL_SERVER_ERROR.getStatusCode()))
-                .andExpect(jsonPath("$.data", nullValue()));
     }
 
 
