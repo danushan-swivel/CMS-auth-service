@@ -7,13 +7,9 @@ import com.cms.auth.domain.response.LoginResponseDto;
 import com.cms.auth.domain.response.UserResponseDto;
 import com.cms.auth.enums.ErrorResponseStatus;
 import com.cms.auth.enums.SuccessResponseStatus;
-import com.cms.auth.exception.AlreadyExistException;
-import com.cms.auth.exception.AuthException;
 import com.cms.auth.service.UserService;
 import com.cms.auth.utills.Constants;
-import com.cms.auth.wrapper.ErrorResponseWrapper;
 import com.cms.auth.wrapper.ResponseWrapper;
-import com.cms.auth.wrapper.SuccessResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -34,49 +30,35 @@ public class UserController extends BaseController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<ResponseWrapper> createUser(@RequestBody UserRequestDto userRequestDto) {
-        try {
-            if (!userRequestDto.isRequiredAvailable()) {
-                log.error("The required field values {} are missing for create new user", userRequestDto.toJson());
-                return getErrorResponse(ErrorResponseStatus.MISSING_REQUIRED_FIELDS);
-            }
-            var user = userService.createUser(userRequestDto);
-            var response = new UserResponseDto(user);
-            log.debug("Successfully created new user");
-            return getSuccessResponse(SuccessResponseStatus.USER_CREATES, response, HttpStatus.CREATED);
-        } catch (AlreadyExistException e) {
-            log.error("The given user name: {} is already registered", userRequestDto.getUserName());
-            return getErrorResponse(ErrorResponseStatus.USER_EXISTS);
-        } catch (AuthException e) {
-            log.error("The create new user is failed for user name: {}", userRequestDto.getUserName());
-            return getInternalServerErrorResponse();
+
+        if (!userRequestDto.isRequiredAvailable()) {
+            log.error("The required field values {} are missing for create new user", userRequestDto.toJson());
+            return getErrorResponse(ErrorResponseStatus.MISSING_REQUIRED_FIELDS);
         }
+        var user = userService.createUser(userRequestDto);
+        var response = new UserResponseDto(user);
+        log.debug("Successfully created new user");
+        return getSuccessResponse(SuccessResponseStatus.USER_CREATES, response, HttpStatus.CREATED);
+
     }
 
     @PostMapping("/login")
     public ResponseEntity<ResponseWrapper> login(@RequestParam String username, @RequestParam String password,
                                                  HttpServletResponse response) {
-        try {
-            String token = response.getHeader(Constants.TOKEN_HEADER);
-            User user = userService.login(username);
-            var responseDto = new LoginResponseDto(user, token);
-            log.debug("The user logged in successfully");
-            return getSuccessResponse(SuccessResponseStatus.USER_LOGGED_IN, responseDto, HttpStatus.CREATED);
-        } catch (AuthException e) {
-            log.error("The logging in the user is failed for username: {}", username);
-            return getInternalServerErrorResponse();
-        }
+
+        String token = response.getHeader(Constants.TOKEN_HEADER);
+        User user = userService.login(username);
+        var responseDto = new LoginResponseDto(user, token);
+        log.debug("The user logged in successfully");
+        return getSuccessResponse(SuccessResponseStatus.USER_LOGGED_IN, responseDto, HttpStatus.CREATED);
     }
 
     @GetMapping("/users")
     public ResponseEntity<ResponseWrapper> getAllUsers() {
-        try {
-            Page<User> userPage = userService.getAllUser();
-            var response = new AllUserResponseDto(userPage);
-            log.debug("Successfully returned the all registered users");
-            return getSuccessResponse(SuccessResponseStatus.READ_LIST_USER, response, HttpStatus.OK);
-        } catch (AuthException e) {
-            log.error("The get the all user details is failed");
-            return getInternalServerErrorResponse();
-        }
+
+        Page<User> userPage = userService.getAllUser();
+        var response = new AllUserResponseDto(userPage);
+        log.debug("Successfully returned the all registered users");
+        return getSuccessResponse(SuccessResponseStatus.READ_LIST_USER, response, HttpStatus.OK);
     }
 }

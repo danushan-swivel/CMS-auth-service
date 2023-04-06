@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum ErrorResponseStatus {
     INTERNAL_SERVER_ERROR("Internal server error"),
     UNAUTHORIZED("The request is unauthorized"),
+    USER_NOT_FOUND("The user not exists"),
     MISSING_REQUIRED_FIELDS("The required fields are missing"),
     INVALID_USER("The use is invalid"),
     USER_EXISTS("The user already exists");
