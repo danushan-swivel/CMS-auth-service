@@ -15,7 +15,7 @@ public class FilterErrorResponseGenerator {
 
     public void sendErrorResponse(HttpServletResponse response, ErrorResponseStatus responseStatus,
                                   HttpStatus httpStatus) throws IOException {
-        ErrorResponseWrapper errorResponseWrapper = new ErrorResponseWrapper(responseStatus, null);
+        ErrorResponseWrapper errorResponseWrapper = new ErrorResponseWrapper(responseStatus, httpStatus);
         byte[] responseToSend = restResponseBytes(errorResponseWrapper);
         response.setHeader("Content-Type", "application/json");
         response.setStatus(httpStatus.value());
