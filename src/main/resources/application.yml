@@ -12,10 +12,9 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   datasource:
-#    url: jdbc:mysql://b6060dfffd3b4a:4deab34a@us-cdbr-east-06.cleardb.net/heroku_58fbec60b723d43?reconnect=true
-    url: jdbc:mysql://localhost:3306/cms_auth
-    username: root
-    password: Dev@#$123
+    url: ${DB_URL:jdbc:mysql://43.205.229.17:3306/cms_auth}
+    username: ${DB_USERNAME:user}
+    password: ${DB_PASSWORD:Dev@#$123}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -26,13 +25,12 @@ spring:
 springdoc:
   show-login-endpoint: true
 
-#eureka:
-#  client:
-#    serviceUrl:
-##      defaultZone: https://cms-discovery.herokuapp.com/eureka
-#      defaultZone: http://localhost:8761/eureka
-#  instance:
-#    preferIpAddress: true
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${DEFAULT_ZONE:http://ec2-65-2-131-246.ap-south-1.compute.amazonaws.com:8761/eureka}
+  instance:
+    preferIpAddress: true
 
 
 security:
