@@ -27,6 +27,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
@@ -62,6 +63,22 @@ class UserControllerTest {
 
     @AfterEach
     void tearDown() {
+    }
+
+    @Test
+    void Should_ReturnOk_When_UserLoggedInSuccessfully() throws Exception {
+        User user = getSampleUser();
+        when(userService.login(anyString())).thenReturn(user);
+        mockMvc.perform(MockMvcRequestBuilders.post(LOGIN_USER_URL)
+                        .header(Constants.TOKEN_HEADER, ACCESS_TOKEN)
+                        .param("username", USER_NAME)
+                        .param("password", PASSWORD)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.message").value(SuccessResponseStatus.USER_LOGGED_IN.getMessage()))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()))
+                .andExpect(jsonPath("$.data.userId", startsWith("uid-")));
     }
 
     @Test

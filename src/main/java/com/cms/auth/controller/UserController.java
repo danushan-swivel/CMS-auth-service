@@ -50,7 +50,7 @@ public class UserController extends BaseController {
         User user = userService.login(username);
         var responseDto = new LoginResponseDto(user, token);
         log.debug("The user logged in successfully");
-        return getSuccessResponse(SuccessResponseStatus.USER_LOGGED_IN, responseDto, HttpStatus.CREATED);
+        return getSuccessResponse(SuccessResponseStatus.USER_LOGGED_IN, responseDto, HttpStatus.OK);
     }
 
     @GetMapping("/users")
