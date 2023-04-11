@@ -90,7 +90,7 @@ class UserControllerTest {
                         .header(Constants.TOKEN_HEADER, ACCESS_TOKEN)
                         .content(userRequestDto.toJson())
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.message").value(SuccessResponseStatus.USER_CREATES.getMessage()))
                 .andExpect(jsonPath("$.statusCode").value(HttpStatus.CREATED.value()))
