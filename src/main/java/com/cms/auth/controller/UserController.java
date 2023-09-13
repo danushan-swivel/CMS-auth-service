@@ -61,4 +61,9 @@ public class UserController extends BaseController {
         log.debug("Successfully returned the all registered users");
         return getSuccessResponse(SuccessResponseStatus.READ_LIST_USER, response, HttpStatus.OK);
     }
+
+    @GetMapping("/sample")
+    public String sample() {
+        return "sample";
+    }
 }
